@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<ctype.h>>
+#include<ctype.h>
 #include<time.h>
 
 void resetBoard();
@@ -25,7 +25,22 @@ int main(){
         playerMove();
 
         winner = checkWinner();
+        if (winner != ' ' || checkFreeSpace() == 0)
+        {
+            break;
+        }
+
+        computerMove();
+        winner = checkWinner();
+        if(winner != ' ' || checkFreeSpace() == 0)
+        {
+            break;
+        }
+        
     }
+
+    printBoard();
+    printWinner(winner);
     
 
     return 0;
@@ -34,14 +49,14 @@ int main(){
 void resetBoard(){
     for (int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < 3; i++)
+        for (int j = 0; j < 3; j++)
         {
             board[i][j] = ' ';
         }
         
     }
     
-};
+}
 
 void printBoard(){
     printf(" %c | %c | %c ",board[0][0],board[0][1],board[0][2]);
@@ -50,20 +65,20 @@ void printBoard(){
     printf("\n---|---|---\n");
     printf(" %c | %c | %c ",board[2][0],board[2][1],board[2][2]);
     printf("\n");
-};
+}
 
 int checkFreeSpace(){
     int freeSpaces = 9;
     for(int i = 0; i < 3 ; i++){
         for (int j = 0; j < 3; j++)
         {
-            if(board[i][j] != 0){
+            if(board[i][j] != ' '){
                 freeSpaces--;
             }
         }
     }
     return freeSpaces;
-};
+}
 
 void playerMove(){
     int x;
@@ -86,14 +101,27 @@ void playerMove(){
         }
     } while (board[x][y] != ' ');
     
-};
+}
 
 void computerMove(){
     srand(time(0));
     int x;
     int y;
 
-};
+    if (checkFreeSpace > 0)
+    {
+        do
+        {
+            x = rand() % 3;
+            y = rand() % 3;
+        } while (board[x][y] != ' ');
+        board[x][y] = COMPUTER;
+    }else{
+        printWinner(' ');
+    }
+        
+
+}
 
 char checkWinner(){
     //check all rows
@@ -129,8 +157,20 @@ char checkWinner(){
     return ' ';
     
     
-};
+}
+
 
 void printWinner(char winner){
-
-};
+    if (winner == PLAYER)
+    {
+        printf("YOU WIN!");
+    }
+    else if(winner == COMPUTER)
+    {
+        printf("You Lose!");
+    }
+    else{
+        printf("IT's A Tie!");
+    }
+    
+}
